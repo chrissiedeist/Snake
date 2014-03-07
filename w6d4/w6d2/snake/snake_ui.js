@@ -33,14 +33,13 @@ $(function() {
       } else if (!!SnakeUI.LETTER_KEYS[code]) {
         this.board.snake.turn(SnakeUI.LETTER_KEYS[code]);
       }
-
-
     }
 
     SnakeUI.prototype.step = function() {
       if (this.running) {
-        this.board.checkSnake();
+        this.board.checkForApple();
         this.board.snake.move();
+        this.board.checkSnake();
         this.board.generateGrid();
         this.render();
       }

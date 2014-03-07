@@ -3,8 +3,9 @@ $(function() {
   var SnakeGame = root.SnakeGame = (root.SnakeGame || {});
 
   var Snake = SnakeGame.Snake = function () {
-    this.segments = [new Coord([0,0])];
-    this.dir = "S";
+    this.segments = [new Coord([4,5])];
+    this.dir = "N";
+    this.growth = false;
   };
 
   var Coord = SnakeGame.Coord = function(pos) {
@@ -12,7 +13,7 @@ $(function() {
   }
 
   var Apple = SnakeGame.Apple = function(pos) {
-    this.pos = pos
+    this.pos = pos;
   }
 
   Apple.randomApple = function(dimX, dimY) {
@@ -29,7 +30,6 @@ $(function() {
     this.dimY = dimY;
     this.apples = this.generateApples(Board.INITIAL_APPLES);
     this.grid = this.generateGrid();
-  // this.apples = this.generateApples();
   }
 
   Snake.DIR = ["N", "E", "S", "W"];
@@ -41,18 +41,11 @@ $(function() {
     "S": [ 1,  0],
     "W": [0,  -1]
   }
-  // Coord.OPP_DIFFS = {
-  //   "S": [ -1, 0],
-  //   "W": [ 0,  1],
-  //   "N": [ 1,  0],
-  //   "E": [0,  -1]
-  // }
 
   Coord.prototype.plus = function(dir) {
     this.pos = [this.pos[0] + Coord.MOVE_DIFFS[dir][0],
                 this.pos[1] + Coord.MOVE_DIFFS[dir][1]];
   }
-
 
   Snake.prototype.turn = function(dir) {
     this.dir = dir
@@ -61,16 +54,16 @@ $(function() {
   Snake.prototype.move = function() {
     var that = this;
 
-    this.segments.forEach(function(segment){
-      segment.plus(that.dir);
-    })
-  }
+    var head = this.segments[0];
+    var newHead = new Coord([head.pos[0], head.pos[1]]);
+    newHead.plus(this.dir);
 
-  Snake.prototype.grow = function() {
-    var tail = this.segments[this.segments.length - 1];
-    new_coord = new Coord(tail.pos[0], tail.pos[1]);
-    new_coord.plus(Coord.OPP_DIFFS[this.dir]);
-    this.segments.push(new_coord);
+    this.segments.unshift(newHead);
+    if (this.growth) {
+    } else {
+      this.segments.pop();
+    }
+    this.growth = false;
   }
 
   Board.prototype.generateGrid = function() {
@@ -91,34 +84,31 @@ $(function() {
   Board.prototype.checkSnake = function() {
     var that = this;
     this.snake.segments.forEach(function(coord){
-  		if (coord.pos[0] > that.dimY){
+  		if (coord.pos[0] >= that.dimY){
   			coord.pos[0] = 0;
   		} else if (coord.pos[0] < 0) {
-  			coord.pos[0] = that.dimY;
+  			coord.pos[0] = that.dimY - 1;
   		}
 
-  		if (coord.pos[1] > that.dimX){
+  		if (coord.pos[1] >= that.dimX){
   			coord.pos[1] = 0;
   		} else if (coord.pos[1] < 0) {
-  			coord.pos[1] = that.dimX;
+  			coord.pos[1] = that.dimX - 1;
   		}
-      // var potentialApple = that.grid[coord.pos[0]][coord.pos[1]]
-  //
-  //     if (potentialApple.constructor === SnakeGame.Apple) {
-  //       that.ateApple(coord);
-  //     }
+
     });
   }
 
-  Board.prototype.ateApple = function(coord) {
+  Board.prototype.checkForApple = function() {
     var that = this;
-
+    var coord = this.snake.segments[0];
     this.apples.forEach(function(apple, idx) {
-      if (coord.pos === apple.pos) {
-        that.apples = that.apples.splice(idx, 1);
+      if (coord.pos + "" === apple.pos + "") {
+        that.snake.growth = true;
+        that.apples.splice(idx, 1);
       }
+
     });
-    this.snake.grow();
   }
 
   Board.prototype.newGrid = function() {
