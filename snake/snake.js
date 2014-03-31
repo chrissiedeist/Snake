@@ -33,7 +33,7 @@ $(function() {
   }
 
   Snake.DIR = ["N", "E", "S", "W"];
-  Board.INITIAL_APPLES = 20;
+  Board.INITIAL_APPLES = 5;
 
   Coord.MOVE_DIFFS = {
     "N": [ -1, 0],
