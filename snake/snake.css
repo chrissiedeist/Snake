@@ -7,10 +7,19 @@ div.container {
 }
 .cell{
   float: left;
-  width: 20px;
-  height: 20px;
-  background: mint;
+  width: 18px;
+  height: 18px;
+  background: red;
   line-height: 30px;
   text-align: center;
   color: black;
+  margin:1px;
+}
+
+.snake {
+ background: green;
+}
+
+.apple {
+  background: yellow;
 }

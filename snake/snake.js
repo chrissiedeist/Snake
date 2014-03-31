@@ -145,7 +145,7 @@ $(function() {
         } else if (cell.constructor === SnakeGame.Coord) {
           return "O";
         } else {
-          return "X";
+          return "*";
         }
       })
     })

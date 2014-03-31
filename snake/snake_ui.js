@@ -47,7 +47,7 @@ $(function() {
     SnakeUI.prototype.render = function() {
       var that = this;
       that.$container.empty();
-      this.board.render().forEach(function(row, i) {
+      this.board.grid.forEach(function(row, i) {
         var $rowDiv = $("<div></div>");
         $rowDiv.addClass("row");
 
@@ -56,6 +56,15 @@ $(function() {
           $cellDiv.addClass("cell ");
           $cellDiv.html(cell);
           $cellDiv.attr("id", "row"+i+"col"+j);
+
+          if (cell === null) { 
+            $cellDiv.addClass("blank");
+          } else if (cell.constructor === SnakeGame.Coord) {
+            $cellDiv.addClass("snake");
+          } else {
+            $cellDiv.addClass("apple");
+          }
+
           $rowDiv.append($cellDiv);
         })
         that.$container.append($rowDiv);
