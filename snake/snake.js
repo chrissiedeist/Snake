@@ -143,9 +143,9 @@ $(function() {
         if (cell === null) {
           return ".";
         } else if (cell.constructor === SnakeGame.Coord) {
-          return "S";
+          return "O";
         } else {
-          return "A";
+          return "X";
         }
       })
     })

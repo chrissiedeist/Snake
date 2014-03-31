@@ -16,7 +16,7 @@ $(function() {
     SnakeUI.prototype.start = function() {
       var that = this;
       this.running = true;
-      this.board = new Board(45, 45);
+      this.board = new Board(20, 20);
 
       $('html').keydown(function(event){
         that.handleKeyEvent(event);
